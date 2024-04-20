@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Lista de ficheros</title>
+  	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+  	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<style type="text/css">
+
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: normal;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-regular-400.woff2") format('woff2');	
+		}
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-solid-900.woff2") format('woff2');	
+		}
+
+		.fa,
+		.fas{
+		  -moz-osx-font-smoothing: grayscale;
+		  -webkit-font-smoothing: antialiased;
+		  display: inline-block;
+		  font-style: normal;
+		  font-variant: normal;
+		  text-rendering: auto;
+		  line-height: 1; 
+		}
+		
+		.fa,
+		.fas {
+		  font-family: 'Font Awesome 5 Free';
+		  font-weight: 900; 
+		}
+
+		.fa-arrow-left:before {
+		  content: "\f060"; 
+		}
+
+		.fa-trash-alt::before{
+			content: "\f2ed";
+		}
+
+		body{
+			margin: 0px;
+			background-color: #E1E2E4;
+		}
+
+		#backArrow{
+			position: absolute;
+			top: 25px;
+			left: 50px;
+		}
+
+		#backArrow i{
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		#backArrow i:hover{
+			color: #fff;
+			cursor: pointer;
+		}
+
+		.deleteButton{
+			padding: 5px;
+			cursor: pointer;
+		}
+
+		.deleteButton:hover{
+			background-color: #c00;
+		}
+
+		.deleteButton:hover i{
+			color: #fff;
+		}
+
+		.deleteButton i{
+			color: #c00;
+			font-weight: bold;
+		}
+		
+		.grid-container{
+			display: grid;
+			grid-template-areas: ". picker ."
+								 ". tabla  ."
+								 ".  btn   .";
+			grid-template-columns: 0.15fr 1fr 0.15fr;
+			grid-template-rows: 75px 0.8fr 0.6fr;
+			max-height: 100vh;
+		
+		}
+
+		.picker{
+			grid-area: picker;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.main-table{
+			grid-area: tabla;
+			background-color: #dedede;
+			height: 600px;
+		
+			background-color: rgba(255, 255, 255, 0.4);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+			border-radius: 4px;
+		
+			font-family: 'Roboto', sans-serif;
+			font-size: 18px;
+			font-weight: bold;
+			color: #00204A;
+		}
+
+		.main-table {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		.main-table span{
+			display: none;
+		}
+		
+		.main-table table{
+			border-collapse: collapse;
+			width: 100%;
+		}
+		
+		.main-table td, th {
+			border: 1px solid #cccccc;
+			padding: 8px;
+
+			text-align: center;
+		}
+
+		.main-table td {
+			color: rgba(94, 94, 94, 1);
+		}
+		
+		.main-table th {
+			font-weight: bold;
+			text-transform: uppercase; 
+		}	
+
+		.main-table tr:nth-child(even) {
+  			background-color: #dddddd;
+		}
+
+		.btn{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			grid-area: btn;
+
+		}
+
+		.btn button {
+			margin: 20px 0px;
+			padding: 8px;
+			color: white;
+			font-family: 'Roboto';
+			font-size: 24px;
+			background-color: rgba(0, 32, 74, 1);
+			border: none;
+			border-radius: 4px;
+			text-decoration:none;
+			width: 100%;
+
+		}
+
+		.btn button:hover {
+			background-color: rgba(0, 32, 74, 0.95);
+			cursor: pointer;
+		}
+
+		@media (max-width: 1000px) {
+			.grid-container{
+				display: grid;
+				grid-template-areas: "   .    "
+									 " picker "
+									 " tabla  "
+									 "  btn   "
+									 "   .    ";
+				grid-template-columns: 1fr;
+				grid-template-rows: 0.3fr 0.6fr 1fr 0.6fr 0.3fr;
+				max-height: 100vh;
+			}
+
+			.main-table {
+				overflow-x: scroll;
+			}
+
+		}
+
+
+
+
+	</style>
+</head>
+		
+<body>
+
+	<div class="grid-container">
+
+		<div id="backArrow">
+			<i class="fas fa-arrow-left"></i>
+		</div>
+
+    	<div class="main-table">
+		  <table>
+		  	
+        	<thead>
+			  		<tr>
+			  			<th>Ruta del archivo</th>
+        	    		<th>Periocidad</th>
+        	    		<th>Tipo backup</th>
+						<th>Último backup</th>
+						<th>Siguiente backup</th>
+						<th>Acciones</th>
+
+			  		</tr>
+			  	</thead>
+			
+        	<tbody id="listing">
+        		
+        	</tbody>
+
+		  </table>
+    	</div>
+
+
+	</div>
+
+	<script>
+
+		const back = document.querySelector('#backArrow')
+		const list = document.getElementById('listing')
+
+		back.addEventListener("click", async() => {
+            await redirect("./www/menu.html");
+        });
+		async function muestraPoliticas(){
+			var resultado = await getPolicies();
+ 			for (let i=0;i<resultado["len"];i++) {
+
+				let fila = document.createElement('tr');
+				fila.className = "fila";
+				let elementoRuta = document.createElement('td');
+				elementoRuta.textContent = resultado["folder"+i]
+				let elementoPeriocidad = document.createElement('td');
+				elementoPeriocidad.textContent = resultado["periodicity"+i]
+				let elementoBackup = document.createElement('td');
+				elementoBackup.textContent = resultado["BackupType"+i]
+				let elementoLast = document.createElement('td');
+				elementoLast.textContent = resultado["lastBackup"+i]
+				let elementoNext = document.createElement('td');
+				elementoNext.textContent = resultado["nextBackup"+i]
+				listing.appendChild(fila);
+
+
+				let deleteButton = document.createElement('td')
+				deleteButton.classList.add('deleteButton')
+				deleteButton.id = i
+				let iconDelete = document.createElement('i')
+				iconDelete.classList.add('fas')
+				iconDelete.classList.add('fa-trash-alt')
+				deleteButton.appendChild(iconDelete)
+
+				deleteButton.addEventListener('click',  async(e) =>{
+					deleted = await deletePolicy(parseInt(e.currentTarget.id))
+					if(deleted){
+						list.removeChild(fila)
+						listing.innerHTML = ""
+						muestraPoliticas()
+					}
+					
+				})
+
+				fila.appendChild(elementoRuta);
+				fila.appendChild(elementoPeriocidad);
+				fila.appendChild(elementoBackup);
+				fila.appendChild(elementoLast);
+				fila.appendChild(elementoNext);
+				fila.appendChild(deleteButton);
+		  };
+		};
+		muestraPoliticas();
+
+
+
+
+	</script>
+
+</body>
+</html> 

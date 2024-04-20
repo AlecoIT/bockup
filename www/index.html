@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Bo-ckup</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+	<style type="text/css">
+
+		body{
+			margin: 0px;
+			display: flex;
+			align-items: center;
+		  	justify-content: center;
+		  	background-color: #E1E2E4;
+		}
+		
+		
+		.divs-container {
+			background-color: #E1E2E4;
+			width: 100vw;
+		
+		  	display: grid;
+		  	grid-template-columns: repeat(5, 1fr);
+		  	grid-template-rows: minmax(100px,200px) 1fr minmax(100px,150px);
+		  	/*grid-gap: 0px 20px;*/
+		  	grid-template-areas: ".   .	  titulo   .   ." 
+		  						 ". login login  login ."
+		  						 ".   .     .      .   .";
+		
+		}
+		
+		.titulo, .titulo > h1{
+			grid-area: titulo;
+		
+			font-family: 'Rubik', sans-serif;
+			font-size: 52px;
+			font-weight: bold;
+			color: #00204A;
+			
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		
+			width: inherit;
+		}
+
+		.titulo > h1 {
+			cursor: pointer;
+			margin: 0px;
+		}
+
+		#error-email {
+			font-family: 'Rubik', sans-serif;
+			font-weight: bold;
+			text-align: center;
+			margin-top: 10px;
+		}
+
+		#error-server-response, #error-email{
+			display: none;
+			
+			padding: 10px;
+			border-radius: 10px;
+
+			background-color: #FFBABA;
+			
+			font-size: 20px;
+			color: #D8000C;
+			
+		}
+		
+		.login-box{
+			grid-area: login;
+		
+			display: flex;
+			align-items: center;
+			
+			flex-direction: column;
+			justify-self: center;
+		
+			background-color: rgba(255, 255, 255, 0.4);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+			border-radius: 10px;
+		
+			width: 600px;
+		
+		}
+		
+		.login-box form {
+			width: 80%;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.login-box h1{
+			font-family: 'Roboto';
+			font-weight: bold;
+			font-size: 40px;
+			color: rgba(94, 94, 94, 1);
+		}
+		
+		.login-box label {
+			font-family: 'Roboto';
+			font-weight: normal;
+			font-size: 25px;
+			color: rgba(94, 94, 94, 0.8);
+			padding: 5px;
+			margin-bottom: 5px;
+		}	
+		
+		.login-box input {
+			padding: 8px;
+			width: 100%;
+			border-radius: 3px;
+			border: 2px solid rgba(125, 125, 125, 0.6);
+			box-sizing: border-box;
+			align-self: center;
+		
+		}
+		
+		.button {
+			padding: 8px;
+			width: 100%;
+			color: white;
+			font-family: 'Roboto';
+			font-weight: bold;
+			font-size: 24px;
+			background-color: rgba(0, 32, 74, 1);
+			border-radius: 10px;
+			text-decoration:none;
+			align-self: center;
+
+			margin-top: 15px;
+		}
+		
+		.button:hover{
+			background-color: rgba(0, 32, 74, 0.9);
+		}
+		
+		hr {
+			margin: 15px 0px 0px 0px;       
+		  	background-color: #7D7D7D;
+		  	height: 1px;
+		}
+		
+		.form-links{
+			display: flex;
+			justify-content: center;
+			padding: 20px;
+
+			cursor: pointer;
+		}
+		
+		.form-links span {
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+		
+		.form-links a{
+			font-family: 'Roboto';
+			font-size: 18px;
+			color: rgba(0, 32, 74, 1);
+			text-decoration: none;
+		}
+		
+		.form-links a:hover{
+			color: rgba(0, 32, 74, 0.7);
+		}
+		
+		
+		
+		
+		@media (max-width: 800px) {
+			.divs-container {
+		
+		  		grid-template-areas: ".   .	  titulo   .   ." 
+		  						 	 ".   .   login    .   ."
+		  						 	 ".   .     .      .   .";
+			}
+		
+			.login-box {
+				width : 80vw;
+			}
+			
+			.login-box form {
+				width: 85%;
+			}
+		
+			.login-box h1 {
+				font-size: 35px;
+			}
+		
+			.login-box label {
+				font-size: 25px;
+			}
+		
+			.login-box input {
+				padding: 8px;
+			}
+		
+			.button {
+				font-size: 18px;
+			}
+		}
+
+	</style>
+</head>
+
+<body onload=start()>
+	<div class="divs-container">
+		<div class="titulo">
+			<h1 id = "btnInicio">Bo-ckup</h1>
+			<span id="error-server-response">
+				<div></div>
+			</span>
+		</div>
+		<div class="login-box">
+
+			<div>
+				<h1>Iniciar sesión</h1>
+			</div>
+
+			<form action="" method="get">
+ 				<label for="email"> Correo electrónico </label>
+				<input type="text" id="email" name="email"> 
+				<span id="error-email"></span>
+ 				
+ 				<label for="password"> Contraseña </label>
+ 				<input type="password" id="password" name="password"> 
+	
+ 				<button class="button">Iniciar sesión</button>
+
+ 				<hr class="line">
+				
+				<div class="form-links">
+ 					<a>Reestablecer contraseña </a>
+					<span>-</span>
+	 				<a id="link-registrarse">Registrarse </a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		const btnLogin = document.querySelector('.button');
+		const btnRegistro = document.querySelector("#link-registrarse");
+		const btnInicio = document.querySelector('#btnInicio')
+
+		btnLogin.addEventListener('click', async () => {
+
+			var email = document.getElementById("email").value;
+			var pass = document.getElementById("password").value;
+	
+			if(email.length < 1){
+				document.getElementById('error-email').style.display = "block"
+				document.getElementById('error-email').innerHTML = "Introduzca un correo electrónico válido" 
+			}else{
+				document.getElementById('error-email').style.display = "none"
+				document.getElementById('error-email').innerHTML = ""
+			}
+
+			if(await sendCredentials(email, pass) && email.length > 0 && pass.length > 0){
+				await redirect("./www/menu.html");
+			}else{
+				document.getElementById('error-server-response').style.display = "block"
+				document.getElementById('error-server-response').innerHTML = "Usuario o contraseña incorrectos" 
+			}
+
+		});
+
+		btnRegistro.addEventListener('click', async () => {
+
+			await redirect("./www/registro.html");
+
+		});
+
+		btnInicio.addEventListener('click', async () => {
+			await redirect("./www/index.html");
+		});
+
+	</script>
+
+</body>
+</html>
+
+		

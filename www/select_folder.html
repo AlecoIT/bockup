@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Subir una carpeta</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  	
+  	<!--CDN's de select2
+  	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+	-->
+
+	<style type="text/css">
+
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: normal;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-regular-400.woff2") format('woff2');	
+		}
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-solid-900.woff2") format('woff2');	
+		}
+
+		.fa,
+		.fas{
+		  -moz-osx-font-smoothing: grayscale;
+		  -webkit-font-smoothing: antialiased;
+		  display: inline-block;
+		  font-style: normal;
+		  font-variant: normal;
+		  text-rendering: auto;
+		  line-height: 1; 
+		}
+		
+		.fa,
+		.fas {
+		  font-family: 'Font Awesome 5 Free';
+		  font-weight: 900; 
+		}
+
+		.fa-arrow-left:before {
+		  content: "\f060"; 
+		}
+		
+		body{
+			margin: 0px;
+			height: 100vh;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;			
+		}
+
+		.main-container{
+			position: relative;
+			background-color: #EDEDED;
+			width: 90%;
+			height: 80vh;
+			border-radius: 8px;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#backArrow{
+			position: absolute;
+			top: 25px;
+			left: 25px;
+		}
+
+		#backArrow i{
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		#backArrow i:hover{
+			color: #fff;
+			cursor: pointer;
+		}
+
+		.textbox{
+			display: flex;
+			flex-direction: column;
+			width: 80%;
+		}
+
+		label{
+			font-family: 'Rubik', sans-serif;
+			font-weight: bold;
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		select#periodicity{
+			margin-bottom: 10px;
+			padding: 5px;
+			font-family: 'Rubik';
+		}
+
+		.minutesPeriodicity, .dailyInHourPeriodicity, .smartDeleteCheck{
+			display: none;
+		}
+
+		.minutesPeriodicity.active, .dailyInHourPeriodicity.active, .smartDeleteCheck.active{
+			display: initial;
+			padding: 10px 0px;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		input[type=number] {
+			-moz-appearance: textfield;
+			padding: 5px;
+			margin-left: 10px;
+		}
+
+		#dailyHour{
+			padding: 5px;
+    		margin-left: 10px;
+    		font-family: 'Rubik', sans-serif;
+    		font-weight: bold;
+    		font-size: 16px;
+			color: #474747;
+		}
+
+		input[type=text]{
+			margin: 10px 0px;
+			padding: 5px;
+			
+			border: 3px solid #bebebe;
+
+			font-size: 15px;
+			color: #474747;
+		}
+
+		input[type=text]:focus{
+			border: 2px solid #5E9ED6;
+			font-size: 16px;
+		}
+
+		/* Oculto la checkbox original*/
+		.smartDeleteCheck input[type=checkbox] {
+			display: none;
+		}
+
+		/* Dibujo una custom check box */
+		.smartDeleteCheck {line-height: 20px;}
+		.smartDeleteCheck label {cursor: pointer;}
+		.smartDeleteCheck label:after {
+			display: inline-block;
+			width: 20px;
+			margin-left: 10px;
+			content: "\00a0";
+			text-align: center;
+
+			font-size: 20px;
+			padding: 2px;
+			background: #ccc;
+		}
+
+		.smartDeleteCheck label:hover:after{
+			background: #bbb;
+		}
+
+		.smartDeleteCheck input:checked ~ label::after {
+			content: "\f00c";
+			font-family: 'Font Awesome 5 Free';
+			font-weight: 900; 
+			background: #3f6cb5;
+			color: #fff;
+		}
+
+		.errorBox{
+			display: none;
+			background-color: #c00;
+    		
+			width: 78%;
+    		padding: 10px;
+    		margin-top: 10px;
+    		border-radius: 2px;
+    		opacity: 80%;
+
+    		font-family: 'Rubik';
+    		font-size: 18px;
+    		font-weight: bold;
+			text-align: center;
+			color: white;
+		}
+
+		button{
+			padding: 8px;
+			
+			background-color: #00204A;
+			border-radius: 6px;
+			border: none;
+
+			font-family: 'Rubik';
+			font-weight: bold;
+			font-size: 18px;
+			color: #fff;
+		}
+
+		button:hover{
+			background-color: rgba(0, 32, 74, 0.9);
+			cursor: pointer;
+		}
+		
+	</style>
+</head>
+		
+<body>
+
+	<div class="main-container">
+		
+		<div id="backArrow">
+			<i class="fas fa-arrow-left"></i>
+		</div>
+
+		<div class="textbox">
+
+			<label>Periodicidad</label>
+			<select id="periodicity">
+				<option>Diaria</option>
+				<option>Semanal</option>
+				<option>Mensual</option>
+				<option>Sincronizado</option>
+				<option>Cada x minutos</option>
+				<option>Diaria a las hh-mm</option>
+			</select>
+
+			<div class="minutesPeriodicity">
+				<label>Introduce cada cuantos minutos</label>
+				<input type="number" id="minutes">
+			</div>
+
+			<div class="dailyInHourPeriodicity">
+				<label>Introduce a que hora quieres que se haga la copia diaria</label>
+				<input type="time" id="dailyHour" step="60000">
+			</div>
+
+			<div class="smartDeleteCheck active">
+				<input type="checkbox" id="smartDeleteCheckbox"> 
+				<label for="smartDeleteCheckbox">Eliminado "inteligente"</label>
+			</div>
+
+			<label>Ruta de la carpeta</label>
+			<input id="path" type="text" name="">
+
+			<button id="btnUpFolder">Comprimir y subir carpeta seleccionada</button>
+		</div>
+		
+		<div class="errorBox">
+			<span id="error"></span>
+		</div>
+
+	</div>
+
+	<script>
+
+		const back = document.querySelector('#backArrow')
+
+		const btn = document.querySelector('#btnUpFolder');
+		const path = document.querySelector('#path')
+		const periodicity = document.getElementById('periodicity')
+		const errorMessage = document.getElementById('error')
+		const errorMessageBox = document.getElementsByClassName('errorBox')[0]
+
+		const minutesBox = document.getElementsByClassName('minutesPeriodicity')[0]
+		const minutes = document.getElementById('minutes')
+
+		const dailyHourBox = document.getElementsByClassName('dailyInHourPeriodicity')[0]
+		const dailyHour = document.getElementById('dailyHour')
+
+		const smartDeleteBox = document.getElementsByClassName('smartDeleteCheck')[0]
+		const smartDeleteCheckbox = document.getElementById('smartDeleteCheckbox')
+
+		let incorrectFolder = false
+		let incorrectPeriodicityValue = false
+
+		back.addEventListener("click", async() => {
+            await redirect("./www/menu.html");
+        });
+
+		periodicity.addEventListener('change', () => {
+			//console.log(periodicity.value)
+			if(periodicity.value == "Cada x minutos"){
+				minutesBox.classList.add("active")
+			}else{
+				minutesBox.classList.remove("active")
+			}
+
+			if(periodicity.value == "Diaria a las hh-mm"){
+				dailyHourBox.classList.add("active")
+			}else{
+				dailyHourBox.classList.remove("active")
+			}
+
+			if(periodicity.value == "Diaria" || periodicity.value == "Semanal" || periodicity.value == "Mensual"){
+				smartDeleteBox.classList.add("active")
+			}else{
+				smartDeleteBox.classList.remove("active")
+			}
+		})
+
+		if(btn){
+			btn.addEventListener('click', async () => {
+
+				if(periodicity.value == "Cada x minutos"){
+					if(minutes.value >= 0 && minutes.value <= 60){
+						await setPolicyOptionalValues(minutes.value)
+						await openFolder(path.value, periodicity.value);
+						incorrectPeriodicityValue = false
+					}else{
+						msg = "Debes introducir un valor entre 0 y 60"
+						errorMessage.innerHTML = msg;
+						errorMessageBox.style.display = 'block'
+						incorrectPeriodicityValue = true
+					}
+				}else if(periodicity.value == "Diaria a las hh-mm"){
+					await setPolicyOptionalValues(dailyHour.value)
+					await openFolder(path.value, periodicity.value);
+				}else if(periodicity.value != "Sincronizado"){ //diaria, semanal y mensual
+					//periodicity.value
+					if(smartDeleteCheckbox.checked){
+						await openFolder(path.value, periodicity.value + " con borrado")
+					}else{
+						await openFolder(path.value, periodicity.value)
+					}
+				}else{
+					await openFolder(path.value, periodicity.value);
+				}
+
+				if(!incorrectFolder && !incorrectPeriodicityValue){
+					await redirect("./www/menu.html")
+				}
+			});
+		}
+
+		function showError(path){
+			msg = `La dirección de la carpeta '${path}' no es una ruta válida`
+			errorMessage.innerHTML = msg;
+			errorMessageBox.style.display = 'block'
+		}
+
+	</script>
+
+</body>
+</html> 

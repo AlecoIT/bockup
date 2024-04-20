@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	
+	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css?family=Rubik:400,700&display=swap" rel="stylesheet"> 
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+	<style type="text/css">
+
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: normal;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-regular-400.woff2") format('woff2');	
+		}
+		@font-face{
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/webfonts/fa-solid-900.woff2") format('woff2');	
+		}
+
+		/*código necesario para los iconos*/		
+
+		.fa,
+		.fas,
+		.far,
+		.fal,
+		.fad,
+		.fab {
+		  -moz-osx-font-smoothing: grayscale;
+		  -webkit-font-smoothing: antialiased;
+		  display: inline-block;
+		  font-style: normal;
+		  font-variant: normal;
+		  text-rendering: auto;
+		  line-height: 1; }
+		
+		.fa-upload:before {
+		  content: "\f093"; 
+		}
+
+		.fa-download:before {
+		  content: "\f019"; 
+		}
+
+		.fa-sign-out-alt:before {
+		  content: "\f2f5"; 
+		}
+
+		.fa-folder-open:before{
+			content: "\f07c";
+		}
+
+		.fa-user:before{
+			content: "\f007";
+		}
+		
+		.fa,
+		.fas,
+		.far {
+		  font-family: 'Font Awesome 5 Free';
+		  font-weight: 900; 
+		}
+
+		body{
+			background-color: #00204A;
+		}
+
+		#main-container{
+			margin: 30px;
+			height: 90vh;
+			display: grid;
+			grid-gap: 40px;
+			grid-template-rows: 1fr 1fr;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-areas: "tarjetaUpload    tarjetaDownload tarjetaSignOut"
+								 "tarjetaUpFolder  tarjetaPolicies        .      ";
+		}
+
+		#main-container > div{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	
+		.tarjetaUpload{
+			grid-area: tarjetaUpload;
+		}
+
+		.tarjetaUpload, .tarjetaDownload, .tarjetaUpFolder > div{
+			cursor: pointer;
+		}
+
+		.tarjetaDownload{grid-area: tarjetaDownload;}
+		.tarjetaSignOut{grid-area: tarjetaSignOut;}
+		.tarjetaUpFolder{grid-area: tarjetaUpFolder;}
+
+		.tarjeta{
+			background-color: #00204A;
+			height: 100%;
+			width: 100%;
+
+			border-radius: 8px;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+
+		}
+
+		.tarjeta:hover{background-color: #fff;}
+		.tarjeta:hover i{color: #00204A;}
+		.tarjeta:hover h1{color: #00204A;}
+
+		.tarjeta > i{
+			font-size: 72px;
+			color: #fff;
+		}
+
+		.tarjeta > h1 {
+			font-family: "Rubik";
+			color: #fff;
+			text-align: center;
+			width: 80%;
+		}
+
+		.tarjetaPolicies{
+			grid-area: tarjetaPolicies;
+			cursor: pointer;
+			font-family: 'Rubik', sans-serif;
+			font-weight: bold;
+			color: #fff;
+		}
+
+		@media (max-width: 1000px) {
+			#main-container{
+				display: grid;
+				grid-template-rows: 0.2fr repeat(5,1fr) 0.2fr;
+				grid-template-columns: 1fr;
+				grid-template-areas: "	     .         "
+									 " tarjetaUpload   "
+									 " tarjetaDownload "
+									 " tarjetaSignOut  "
+									 " tarjetaUpFolder "
+									 " tarjetaPolicies "
+									 "	     .         ";
+				grid-gap: 20px;
+			}
+
+			#main-container > div{
+				margin: 20px;
+			}
+
+			.tarjeta{
+				padding: 20px;
+				flex-direction: initial;
+			}
+		}
+
+	</style>
+
+</head>
+<body>
+	<div id="main-container">
+		
+		<div class="tarjetaUpload">
+			<div class="tarjeta">
+				<i class="fas fa-upload"></i>
+				<h1>Subir archivo/s puntual/es</h1>
+			</div>
+		</div>
+		<div class="tarjetaDownload">
+			<div class="tarjeta">
+				<i class="fas fa-download"></i>
+				<h1>Recuperar copia de seguridad</h1>
+			</div>
+		</div>
+		<div class="tarjetaSignOut">
+			<div class="tarjeta">
+				<i class="fas fa-sign-out-alt"></i>
+				<h1>Cerrar sesión</h1>
+			</div>
+		</div>
+
+		<div class="tarjetaUpFolder">
+			<div class="tarjeta">
+				<i class="far fa-folder-open"></i>
+				<h1>Subir carpeta</h1>
+			</div>
+		</div>
+
+		<div class="tarjetaPolicies">
+			<div class="tarjeta">
+				<i class="far fa-user"></i>
+				<h1>Mis políticas</h1>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		const btnUpload = document.querySelector('.tarjetaUpload');
+		const btnDownload = document.querySelector('.tarjetaDownload');
+		const btnUploadFolder = document.querySelector('.tarjetaUpFolder');
+		const btnUpPolicies= document.querySelector('.tarjetaPolicies');
+		//const btnSignOut = document.getElementsByClassName('tarjetaSignOut')[0]
+
+		if(btnUpload){
+			btnUpload.addEventListener('click', async () => {
+				await redirect("./www/tabla.html");
+			});
+		}
+
+		if(btnDownload){
+			btnDownload.addEventListener('click', async () => {
+				await redirect("./www/list_backups.html");
+			});
+		}
+
+		if(btnUploadFolder){
+			btnUploadFolder.addEventListener('click', async () => {
+				await redirect("./www/select_folder.html");
+			});
+		}
+	
+		if(btnUpPolicies){
+			btnUpPolicies.addEventListener('click', async () => {
+				await redirect("./www/tabla_policies.html");
+			});
+		}
+
+		/*
+		if(btnSignOut){
+			btnSignOut.addEventListener('click', async () =>{
+				await logout()
+				await redirect("./www/index.html")
+			})
+		}*/
+
+
+	</script>
+
+</body>
+</html>

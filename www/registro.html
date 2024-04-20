@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Bo-ckup</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+	<style type="text/css">
+
+		body{
+			margin: 0px;
+			display: flex;
+			align-items: center;
+		  	justify-content: center;
+		  	background-color: #E1E2E4;
+		}
+		
+		
+		.divs-container {
+			background-color: #E1E2E4;
+			width: 100vw;
+		
+		  	display: grid;
+		  	grid-template-columns: repeat(5, 1fr);
+		  	grid-template-rows: minmax(100px,200px) 1fr minmax(100px,150px);
+		  	/*grid-gap: 0px 20px;*/
+		  	grid-template-areas: ".   .	  titulo   .   ." 
+		  						 ". login login  login ."
+		  						 ".   .     .      .   .";
+		
+		}
+		
+		.titulo, .titulo > h1{
+			grid-area: titulo;
+		
+			font-family: 'Rubik', sans-serif;
+			font-size: 52px;
+			font-weight: bold;
+			color: #00204A;
+			
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		
+			width: inherit;
+		}
+
+		.titulo > h1 {
+			cursor: pointer;
+		}
+		
+		.login-box{
+			grid-area: login;
+		
+			display: flex;
+			align-items: center;
+			
+			flex-direction: column;
+			justify-self: center;
+		
+			background-color: rgba(255, 255, 255, 0.4);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+			border-radius: 10px;
+		
+			width: 600px;
+		
+		}
+		
+		.login-box form {
+			width: 80%;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.login-box h1{
+			font-family: 'Roboto';
+			font-size: 40px;
+			color: rgba(94, 94, 94, 1);
+		}
+		
+		.login-box label {
+			font-family: 'Roboto';
+			font-weight: lighter;
+			font-size: 25px;
+			color: rgba(94, 94, 94, 0.8);
+			padding: 5px;
+			margin-bottom: 5px;
+		}	
+		
+		.login-box input {
+			padding: 8px;
+			width: 100%;
+			border-radius: 3px;
+			border: 2px solid rgba(125, 125, 125, 0.6);
+			box-sizing: border-box;
+			align-self: center;
+		
+		}
+		
+		.button {
+			margin-bottom: 20px;
+			padding: 8px;
+			width: 100%;
+			color: white;
+			font-family: 'Roboto';
+			font-weight: bold;
+			font-size: 24px;
+			background-color: rgba(0, 32, 74, 1);
+			border-radius: 10px;
+			text-decoration:none;
+			align-self: center;
+		}
+		
+		.button:hover{
+			background-color: rgba(0, 32, 74, 0.9);
+		}		
+		
+		
+		@media (max-width: 800px) {
+			.divs-container {
+		
+		  		grid-template-areas: ".   .	  titulo   .   ." 
+		  						 	 ".   .   login    .   ."
+		  						 	 ".   .     .      .   .";
+			}
+		
+			.login-box {
+				width : 80vw;
+			}
+			
+			.login-box form {
+				width: 85%;
+			}
+		
+			.login-box h1 {
+				font-size: 35px;
+			}
+		
+			.login-box label {
+				font-size: 25px;
+			}
+		
+			.login-box input {
+				padding: 8px;
+			}
+		
+			.button {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+
+<body onload=start()>
+	<div class="divs-container">
+		<div class="titulo">
+			<h1 id = "btnInicio">Bo-ckup</h1>
+		</div>
+		<div class="login-box">
+
+			<div>
+				<h1>Registro</h1>
+			</div>
+
+			<form action="" method="get">
+ 				<label for="email"> Correo electrónico
+ 					<input type="text" id="email" name="email"> 
+ 				</label>
+ 				
+ 				
+ 				<label for="password"> Contraseña
+ 					<input type="password" id="password" name="password"> 
+				</label>
+
+				<label for="password"> Repetir Contraseña
+ 					<input type="password" id="r-password" name="r-password"> 
+				</label>
+	
+ 				<button class="button">Registrarse</button>
+				
+			</form>
+		</div>
+	</div>
+
+	<script>
+		const btnLogin = document.querySelector('.button');
+		const btnInicio = document.querySelector('#btnInicio')
+
+		btnLogin.addEventListener('click', async () => {
+
+			var email = document.getElementById("email").value;
+			var pass = document.getElementById("password").value;
+
+			if(email == null || email == ""){
+				alert("Por favor introduce un correo electrónico");
+			}else if(await registerClient(email, pass)){
+				await redirect("./www/menu.html");
+			}else{
+				alert("El usuario ya existe");
+			}
+
+		});
+
+		btnInicio.addEventListener('click', async () => {
+			await redirect("./www/index.html");
+		});
+
+	</script>
+
+</body>
+</html>
+

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Lista de ficheros</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+	<style type="text/css">
+
+		.fa,
+		.fas{
+		  -moz-osx-font-smoothing: grayscale;
+		  -webkit-font-smoothing: antialiased;
+		  display: inline-block;
+		  font-style: normal;
+		  font-variant: normal;
+		  text-rendering: auto;
+		  line-height: 1; 
+		}
+		
+		.fa,
+		.fas {
+		  font-family: 'Font Awesome 5 Free';
+		  font-weight: 900; 
+		}
+
+		.fa-arrow-left:before {
+		  content: "\f060"; 
+		}
+
+
+		body{
+			margin: 0px;
+			background-color: #E1E2E4;
+		}
+
+		#backArrow{
+			position: absolute;
+			top: 25px;
+			left: 50px;
+		}
+
+		#backArrow i{
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		#backArrow i:hover{
+			color: #fff;
+			cursor: pointer;
+		}
+		
+		.grid-container{
+			display: grid;
+			grid-template-areas: ". picker ."
+								 ". tabla  ."
+								 ".  btn   .";
+			grid-template-columns: 0.15fr 1fr 0.15fr;
+			grid-template-rows: 75px 0.8fr 0.6fr;
+			max-height: 100vh;
+		
+		}
+
+		.picker{
+			grid-area: picker;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.main-table{
+			grid-area: tabla;
+			background-color: #dedede;
+			height: 600px;
+		
+			background-color: rgba(255, 255, 255, 0.4);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+			border-radius: 4px;
+		
+			font-family: 'Roboto', sans-serif;
+			font-size: 18px;
+			font-weight: bold;
+			color: #00204A;
+		}
+
+		.main-table {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		.main-table span{
+			display: none;
+		}
+		
+		.main-table table{
+			border-collapse: collapse;
+			width: 100%;
+		}
+		
+		.main-table td, th {
+			border: 1px solid #cccccc;
+			padding: 8px;
+
+			text-align: center;
+		}
+
+		.main-table td {
+			color: rgba(94, 94, 94, 1);
+		}
+		
+		.main-table th {
+			font-weight: bold;
+			text-transform: uppercase; 
+		}	
+
+		.main-table tr:nth-child(even) {
+  			background-color: #dddddd;
+		}
+
+		.btn{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			grid-area: btn;
+
+		}
+
+		.btn button {
+			margin: 20px 0px;
+			padding: 8px;
+			color: white;
+			font-family: 'Roboto';
+			font-size: 24px;
+			background-color: rgba(0, 32, 74, 1);
+			border: none;
+			border-radius: 4px;
+			text-decoration:none;
+			width: 100%;
+
+		}
+
+		.btn button:hover {
+			background-color: rgba(0, 32, 74, 0.95);
+			cursor: pointer;
+		}
+
+		@media (max-width: 1000px) {
+			.grid-container{
+				display: grid;
+				grid-template-areas: "   .    "
+									 " picker "
+									 " tabla  "
+									 "  btn   "
+									 "   .    ";
+				grid-template-columns: 1fr;
+				grid-template-rows: 0.3fr 0.6fr 1fr 0.6fr 0.3fr;
+				max-height: 100vh;
+			}
+
+			.main-table {
+				overflow-x: scroll;
+			}
+
+		}
+
+
+
+
+	</style>
+</head>
+		
+<body>
+
+	<div class="grid-container">
+
+		<div id="backArrow">
+			<i class="fas fa-arrow-left"></i>
+		</div>
+
+		<div class="picker">
+			<input type="file" id="picker" name="fileList"webkitdirectory multiple>
+		</div>
+    	
+    	<div class="main-table">
+		  <table>
+		  	
+        	<thead>
+			  		<tr>
+			  			<th>
+							<input id="masterCheckbox" type="checkbox" value="1">
+			  			</th>
+			  			<th>Nombre del fichero</th>
+        	    		<th>Tamaño</th>
+        	    		<th>Tipo</th>
+        	    		<th>Fecha de modificación</th>
+			  		</tr>
+			  	</thead>
+			
+        	<tbody id="listing">
+        		
+        	</tbody>
+
+		  </table>
+    	</div>
+
+    	<div class="btn">
+    		<button id="btn-compress-send">Comprimir y enviar ficheros seleccionados</button>
+    	</div>
+	</div>
+
+	<script>
+
+		var filesArray = [];
+
+		//función que transforma segundos unix a fecha
+		function timeConverter(time){
+  			var a = new Date(time);
+  			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  			var year = a.getFullYear();
+  			var month = months[a.getMonth()];
+  			var date = a.getDate();
+  			var hour = a.getHours();
+  			var min = a.getMinutes();
+  			var sec = a.getSeconds();
+  			var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  			
+  			return time;
+		}
+
+		//función que convierte ficheros a base64
+		const toBase64 = file => new Promise((resolve, reject) => {
+    		const reader = new FileReader();
+    		reader.readAsDataURL(file);
+    		reader.onload = () => resolve(reader.result);
+    		reader.onerror = error => reject(error);
+		});
+
+		const back = document.querySelector('#backArrow')
+
+		let picker = document.getElementById('picker');
+		let listing = document.getElementById('listing');
+		let btnSend = document.getElementById('btn-compress-send');
+		let masterCheckbox = document.getElementById('masterCheckbox');
+
+		back.addEventListener("click", async() => {
+            await redirect("./www/menu.html");
+        });
+		
+		picker.addEventListener('change', e => {
+		  for (let file of Array.from(e.target.files)) {
+
+			//pongo todos los archivos en filesArray
+			filesArray.push(file)
+
+		    let fila = document.createElement('tr');
+		    fila.className = "fila";
+
+		    let elementoCheck = document.createElement('td');
+		    var checkbox = document.createElement('input');
+		    checkbox.type = "checkbox";
+		    checkbox.className = "checks";
+		    elementoCheck.appendChild(checkbox);
+		    
+		    let elementoNombre = document.createElement('td');
+		    elementoNombre.textContent = file.name;
+
+		    let elementoTam = document.createElement('td');
+		    elementoTam.textContent = file.size;
+
+		    let elementoTipo = document.createElement('td');
+			elementoTipo.textContent = file.type;
+			
+			let elementoRuta = document.createElement('td');
+			elementoRuta.textContent = file.webkitRelativePath
+
+		    let elementoFecha = document.createElement('td');
+		    var fechaUltimaModificacion = timeConverter(file.lastModified);
+			elementoFecha.textContent = fechaUltimaModificacion;
+		   
+		    listing.appendChild(fila);
+		    fila.appendChild(elementoCheck);
+		    fila.appendChild(elementoNombre);
+		    fila.appendChild(elementoTam);
+		    fila.appendChild(elementoTipo);
+			fila.appendChild(elementoFecha);
+			fila.appendChild(elementoRuta);
+
+		  };
+		});
+
+		masterCheckbox.addEventListener('click', async () => {
+			try{
+
+				var checkboxes = document.getElementsByClassName('checks');
+	
+				for(var i = 0; i < document.getElementsByClassName('checks').length; i++){
+					checkboxes[i].checked = "checked";
+				}
+
+				document.getElementById("masterCheckbox").checked == "checked";
+
+			}catch(e){
+				//console.log(e);
+			}
+
+		});
+
+		btnSend.addEventListener('click', async () => {
+
+			var filesData = [];
+			var filesNames = [];
+
+			var checkboxes = document.getElementsByClassName('checks');
+			var filas = document.getElementsByClassName('fila');
+
+			//console.log(filesArray)
+
+			for(var i = 0; i < filas.length; i++){
+
+				var columnas = filas[i].childNodes;
+
+				for (var j = 0; j < columnas.length; j++) {
+				    if(columnas[j].firstChild != null && columnas[j].firstChild.className == "checks"){
+				    	if(columnas[j].firstChild.checked){
+							//solo para aquellos archivos con tick
+							const result = await toBase64(filesArray[i]);
+							filesData.push(result)
+							filesNames.push(columnas[1].firstChild.wholeText)
+				    	}
+				    }
+				}
+					
+				
+			}
+
+			//envio a go todos los archivos en base 64 y los nombres de los ficheros
+			openFiles(filesData, filesNames, filesData.length)
+
+		});
+
+
+
+	</script>
+
+</body>
+</html> 

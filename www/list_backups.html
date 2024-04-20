@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Subir una carpeta</title>
+  	<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Rubik:400,700|Ubuntu&display=swap" rel="stylesheet"> 
+  	
+  	<!--CDN's de select2
+  	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+	-->
+
+	<style type="text/css">
+
+		.fa,
+		.fas{
+		  -moz-osx-font-smoothing: grayscale;
+		  -webkit-font-smoothing: antialiased;
+		  display: inline-block;
+		  font-style: normal;
+		  font-variant: normal;
+		  text-rendering: auto;
+		  line-height: 1; 
+		}
+		
+		.fa,
+		.fas {
+		  font-family: 'Font Awesome 5 Free';
+		  font-weight: 900; 
+		}
+
+		.fa-arrow-left:before {
+		  content: "\f060"; 
+		}
+		
+		body{
+			margin: 0px;
+			height: 100vh;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;			
+		}
+
+		.main-container{
+			position: relative;
+
+			background-color: #EDEDED;
+			width: 90%;
+			height: 80vh;
+			border-radius: 8px;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#backArrow{
+			position: absolute;
+			top: 25px;
+			left: 25px;
+		}
+
+		#backArrow i{
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		#backArrow i:hover{
+			color: #fff;
+			cursor: pointer;
+		}
+
+		.textbox{
+			display: flex;
+			flex-direction: column;
+			width: 80%;
+		}
+
+		label{
+			font-family: 'Rubik', sans-serif;
+			font-weight: bold;
+			font-size: 24px;
+			color: #00204A;
+		}
+
+		select{
+			padding: 5px;
+    		margin: 10px 0px;
+    		font-family: 'Rubik';
+			border: 3px solid #bebebe;
+		}
+
+		select:focus{
+			outline: none;
+		}
+
+		input[type=text]{
+			margin: 10px 0px;
+			padding: 5px;
+			
+			border: 3px solid #bebebe;
+
+			font-size: 15px;
+			color: #474747;
+		}
+
+		input[type=text]:focus{
+			border: 2px solid #5E9ED6;
+			font-size: 16px;
+		}
+
+		button{
+			padding: 8px;
+			
+			background-color: #00204A;
+			border-radius: 6px;
+			border: none;
+
+			font-family: 'Rubik';
+			font-weight: bold;
+			font-size: 18px;
+			color: #fff;
+		}
+
+		button:hover{
+			background-color: rgba(0, 32, 74, 0.9);
+			cursor: pointer;
+		}
+		
+	</style>
+</head>
+		
+<body>
+
+	<div class="main-container">
+
+		<div id="backArrow">
+			<i class="fas fa-arrow-left"></i>
+		</div>
+		
+		<div class="textbox">
+
+			<label>Periodicidad</label>
+			<select id="periodicity">
+				<option id="fillOption">Selecciona una periodicidad</option>
+			</select>
+
+			<br>
+
+			<label>Lista de backups</label>
+			<select id="backups"></select>
+
+			
+			<label>Ruta de la carpeta destino</label>
+			<input id="path" type="text" name="">
+
+			<button id="btnDownFolder">Recuperar copia de seguridad</button>
+
+		</div>
+
+
+	</div>
+
+    <script>
+
+    	const back = document.querySelector('#backArrow')
+
+        const listPeriodicity = document.querySelector('#periodicity');
+		const filler = document.querySelector('#fillOption')
+        const listBackups = document.querySelector('#backups')
+		const btn = document.querySelector('#btnDownFolder');
+		const path = document.querySelector('#path')
+
+        document.addEventListener("DOMContentLoaded", async() => {
+            await getListPeriodicity();
+        });
+
+        back.addEventListener("click", async() => {
+            await redirect("./www/menu.html");
+        });
+
+		listPeriodicity.addEventListener('change', async() => {
+			if(listPeriodicity.contains(filler)){
+				listPeriodicity.removeChild(filler)
+			}
+
+			listBackups.querySelectorAll('*').forEach(n => n.remove());
+				
+			await getListBackups(listPeriodicity.value)
+		});
+
+		if(btn){
+			btn.addEventListener('click', async () => {
+				await getBackup(listPeriodicity.value, listBackups.value, path.value);
+				await redirect("./www/menu.html")
+			});
+		}
+        
+        function addOption(textOption, type){
+            var opt = document.createElement('option');
+            opt.value = textOption; 
+            opt.appendChild( document.createTextNode(textOption) );
+
+			if(type == "periodicity")
+            	listPeriodicity.appendChild(opt); 
+			else
+				listBackups.appendChild(opt)
+        }
+
+        
+    </script>
+
+</body>
+</html> 
